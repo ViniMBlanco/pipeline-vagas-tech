@@ -235,8 +235,7 @@ Imagens geradas a partir de consultas reais ao banco `vagas_tech` após uma exec
 
 ### Interface do Airflow
 
-![DAG pipeline_vagas_tecnologia com as 4 tasks em sucesso](docs/screenshots/airflow_graph_success.png)
-![Histórico de execuções na Grid view](docs/screenshots/airflow_grid_success.png)
+![DAG pipeline_vagas_tecnologia com as 4 tasks em sucesso, incluindo histórico de execuções](docs/screenshots/airflow_graph_success.png)
 
 ### Saída real da API do Airflow
 

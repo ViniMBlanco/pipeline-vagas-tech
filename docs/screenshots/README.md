@@ -6,24 +6,4 @@
   pip install matplotlib
   python docs/screenshots/gerar_evidencias.py
   ```
-
-## Pendente (opcional): screenshots do Airflow
-
-Ainda faltam os 2 prints da interface do Airflow referenciados no README principal. Tire e salve com exatamente estes nomes:
-
-1. **`airflow_graph_success.png`**
-   - Acesse `http://localhost:8080` (login `airflow` / `airflow`)
-   - Menu **DAGs** → `pipeline_vagas_tecnologia` → aba **Graph**
-   - Print mostrando as 4 tasks (`extract`, `validate`, `transform`, `load`) com contorno verde (success)
-
-2. **`airflow_grid_success.png`**
-   - Mesma DAG, aba **Grid**
-   - Print mostrando o histórico de execuções (colunas coloridas por task)
-
-Depois de salvar os dois arquivos aqui:
-
-```bash
-git add docs/screenshots/*.png
-git commit -m "Adiciona screenshots de evidência da execução no Airflow"
-git push
-```
+- `airflow_graph_success.png` — print da interface do Airflow (`pipeline_vagas_tecnologia` → Graph) mostrando as 4 tasks em sucesso, com o histórico de execuções na mini-grade lateral.
