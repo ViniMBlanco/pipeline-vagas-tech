@@ -16,6 +16,7 @@ Pipeline de dados que extrai vagas de tecnologia da API pública [RemoteOK](http
 - [Como executar](#como-executar)
 - [Onde ver os resultados](#onde-ver-os-resultados)
 - [Solução de problemas comuns](#solução-de-problemas-comuns)
+- [Evidências de execução](#evidências-de-execução)
 - [Resultados obtidos](#resultados-obtidos)
 
 ## Arquitetura
@@ -224,13 +225,67 @@ O `docker-compose.yaml` já mapeia `host.docker.internal` para o gateway correto
 
 O serviço do PostgreSQL pode subir **antes** do Docker criar a interface `docker0` (corrida de inicialização no boot). O Postgres continua rodando normalmente, só falha silenciosamente o bind no IP do Docker. Basta rodar `sudo systemctl restart postgresql` depois que o Docker já estiver de pé.
 
+## Evidências de execução
+
+### Interface do Airflow
+
+![DAG pipeline_vagas_tecnologia com as 4 tasks em sucesso](docs/screenshots/airflow_graph_success.png)
+![Histórico de execuções na Grid view](docs/screenshots/airflow_grid_success.png)
+
+### Saída real da API do Airflow
+
+Consulta feita à execução `manual_test_fix3_1783955182` via `GET /api/v1/dags/pipeline_vagas_tecnologia/dagRuns/{run_id}`:
+
+```
+dag_run_id: manual_test_fix3_1783955182
+state: success
+run_type: manual
+start_date: 2026-07-13T15:47:27.059679+00:00
+end_date: 2026-07-13T15:52:40.768727+00:00
+```
+
+Estado de cada task (`GET .../taskInstances`):
+
+```
+load       state=success    duration=1.102241s  start=2026-07-13T15:52:39.569196+00:00
+extract    state=success    duration=1.933992s  start=2026-07-13T15:06:29.193569+00:00
+validate   state=success    duration=0.619263s  start=2026-07-13T15:06:37.013001+00:00
+transform  state=success    duration=0.667718s  start=2026-07-13T15:06:40.836218+00:00
+```
+
+### Dados reais no PostgreSQL após a carga
+
+```sql
+SELECT (SELECT COUNT(*) FROM vagas) AS vagas,
+       (SELECT COUNT(*) FROM tecnologias) AS tecnologias,
+       (SELECT COUNT(*) FROM vaga_tecnologias) AS associacoes;
+```
+```
+ vagas | tecnologias | associacoes
+-------+-------------+-------------
+   111 |          78 |        1216
+```
+
+```sql
+SELECT etapa, status, qtd_registros, executado_em
+FROM log_execucao ORDER BY executado_em DESC LIMIT 4;
+```
+```
+   etapa   | status  | qtd_registros |        executado_em
+-----------+---------+---------------+----------------------------
+ load      | sucesso |           100 | 2026-07-13 16:50:31.637605
+ transform | sucesso |           100 | 2026-07-13 16:50:27.021600
+ validate  | sucesso |           100 | 2026-07-13 16:50:22.720342
+ extract   | sucesso |           100 | 2026-07-13 16:50:16.165085
+```
+
 ## Resultados obtidos
 
-Última execução completa via Airflow (todas as 4 tasks com sucesso):
+Estado atual do banco após múltiplas execuções (a carga é idempotente via `id_externo`, então reexecuções acumulam vagas novas sem duplicar as já existentes):
 
-- **100** vagas coletadas e carregadas
-- **77** tecnologias únicas extraídas
-- **1.041** associações vaga↔tecnologia
+- **111** vagas coletadas e carregadas
+- **78** tecnologias únicas extraídas
+- **1.216** associações vaga↔tecnologia
 
 ## Autor
 
