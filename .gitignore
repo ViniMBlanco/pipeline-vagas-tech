@@ -1,0 +1,31 @@
+# Ambiente virtual
+venv/
+__pycache__/
+*.pyc
+
+# Variáveis sensíveis
+.env
+
+# Dados (não versionar dados brutos/processados)
+data/raw/*
+data/quarantine/*
+data/validated/*
+data/processed/*
+!data/raw/.gitkeep
+!data/quarantine/.gitkeep
+!data/validated/.gitkeep
+!data/processed/.gitkeep
+
+# Airflow
+airflow/logs/
+airflow/airflow.db
+airflow/airflow.cfg
+airflow/webserver_config.py
+
+# Logs
+logs/*
+!logs/.gitkeep
+
+# IDE
+.vscode/
+.env.airflow
