@@ -225,6 +225,14 @@ O serviço do PostgreSQL pode subir **antes** do Docker criar a interface `docke
 
 ## Evidências de execução
 
+### Dados reais carregados no PostgreSQL
+
+Imagens geradas a partir de consultas reais ao banco `vagas_tech` após uma execução da DAG (script em [`docs/screenshots/gerar_evidencias.py`](docs/screenshots/gerar_evidencias.py)):
+
+![Amostra da tabela vagas com dados reais](docs/screenshots/dados_carregados_amostra.png)
+
+![Tecnologias mais frequentes nas vagas carregadas](docs/screenshots/tecnologias_mais_frequentes.png)
+
 ### Interface do Airflow
 
 ![DAG pipeline_vagas_tecnologia com as 4 tasks em sucesso](docs/screenshots/airflow_graph_success.png)
