@@ -2,8 +2,6 @@
 
 Pipeline de dados que extrai vagas de tecnologia da API pública [RemoteOK](https://remoteok.com/api), valida a qualidade dos registros, transforma e padroniza os dados, e os carrega em um banco PostgreSQL. Toda a execução é orquestrada por uma DAG do **Apache Airflow**.
 
-> **Nota sobre a arquitetura: ETL, não ELT.** O escopo original do projeto especificava uma arquitetura ELT (*Extract, Load, Transform* — carga dos dados brutos primeiro, transformação depois, dentro do banco). A implementação final é **ETL** (*Extract, Transform, Load*): a transformação acontece em Python/Pandas, **antes** da carga, e só os dados já padronizados chegam ao PostgreSQL. Essa foi uma decisão consciente — o pipeline valida e padroniza os dados em memória com Pandas por ser mais simples de testar e depurar do que transformar dentro do banco — e não uma pendência. O nome de alguns artefatos (comentários no código, docstrings) ainda referencia "ELT" por herança do escopo original; o comportamento real é ETL.
-
 ## Índice
 
 - [Arquitetura](#arquitetura)
